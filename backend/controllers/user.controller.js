@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator')
 const userModel = require('../models/user.model')
 const userService = require('../services/user.service')
 const otpModel = require('../models/otp.model')
+const blacklistTokenModel = require('../models/blacklistToken')
 
 
 
@@ -102,12 +103,12 @@ module.exports.loginUser = async (req, res, next) => {
 
     const { email, password } = req.body;
     console.log(email, password);
-    
+
 
 
     const user = await userModel.findOne({ email }).select('+password')
     console.log(user);
-    
+
 
     if (!user) {
         return res.status(400).json({ message: 'Incorrect Email or Password' })
@@ -116,7 +117,7 @@ module.exports.loginUser = async (req, res, next) => {
     const isMatch = await user.comparePassword(password);
 
     console.log(isMatch);
-    
+
 
     if (!isMatch) {
         return res.status(401).json('eeeeeeeeeeeeeEmail or password incorrect');
@@ -128,3 +129,18 @@ module.exports.loginUser = async (req, res, next) => {
 
     res.status(200).json({ token, user })
 }
+
+
+module.exports.logoutUser = async (req, res, next) => {
+    const token = req.cookies.token || req.headers.authorization.aplit(' ')[1];
+    res.clearCookie('token');
+
+
+    await blacklistTokenModel.create({ token });
+
+    res.status(200).json('user logged out')
+}
+
+module.exports.getUserProfile = async (req, res, next) => {
+    res.status(200).json(req.user);
+} 
