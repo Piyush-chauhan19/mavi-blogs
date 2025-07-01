@@ -8,6 +8,7 @@ const app = express();
 const userRoutes = require('./routes/user.routes')
 connectToDB()
 
+app.use('/profilePictures', express.static('profilePictures'));
 
 app.use(cors());
 app.use(express.json());

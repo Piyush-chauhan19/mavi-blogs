@@ -102,13 +102,8 @@ module.exports.loginUser = async (req, res, next) => {
     }
 
     const { email, password } = req.body;
-    console.log(email, password);
-
-
 
     const user = await userModel.findOne({ email }).select('+password')
-    console.log(user);
-
 
     if (!user) {
         return res.status(400).json({ message: 'Incorrect Email or Password' })
@@ -143,4 +138,29 @@ module.exports.logoutUser = async (req, res, next) => {
 
 module.exports.getUserProfile = async (req, res, next) => {
     res.status(200).json(req.user);
-} 
+}
+
+module.exports.updateProfilePic = async (req, res, next) => {
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+        return res.status(400).json({ error: err.array() });
+    }
+
+    const id = req.user._id;
+
+    if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const updated = await userModel.findByIdAndUpdate(
+        id,
+        { profilePic: req.file.filename },
+        { new: true }
+    )
+
+    if (!updated) {
+        return res.status(404).json({error: 'user not found'})
+    }
+
+    res.status(200).json({message: 'Profile pic update'})
+}

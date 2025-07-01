@@ -1,5 +1,4 @@
 import axios from 'axios';
-import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,7 +13,7 @@ const Login = () => {
             password:password
         }
 
-        const response = await axios.post('http://localhost:4000/user/login',userData)
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`,userData)
         if (response.status === 200) {
             localStorage.setItem('token',response.data.token)
             navigate('/');

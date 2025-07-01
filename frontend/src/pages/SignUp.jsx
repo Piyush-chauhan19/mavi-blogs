@@ -19,7 +19,7 @@ const SignUp = () => {
                 userName: Username
             }
 
-            const response = await axios.post('http://localhost:4000/user/signup', userData)
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/signup`, userData)
             if (response.status === 200) {
                 setShowAdditionalFields(true)
             }
@@ -31,7 +31,7 @@ const SignUp = () => {
                 otp: otp
             }
 
-            const response = await axios.post('http://localhost:4000/user/register', userData)
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, userData)
             if (response.status === 200) {
                 navigate('/')
             }
