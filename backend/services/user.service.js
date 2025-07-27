@@ -18,6 +18,17 @@ module.exports.createUser = async ({
     return user
 }
 
+module.exports.updatePassword = async ({email, password}) => {
+    if (!email || !password) {
+        throw new Error("All fields are required to update password");
+    }
+
+    await userModel.findOneAndUpdate(
+        { email },
+        { password: password},
+    );
+}   
+
 module.exports.sendOtpEmail = async (email, otp) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',

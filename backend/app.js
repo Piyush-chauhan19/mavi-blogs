@@ -6,9 +6,11 @@ const connectToDB = require('./db');
 const cookieParser = require('cookie-parser');
 const app = express();
 const userRoutes = require('./routes/user.routes')
+const blogRoutes = require('./routes/blog.routes')
 connectToDB()
 
 app.use('/profilePictures', express.static('profilePictures'));
+app.use('/coverPictures', express.static('coverPictures'));
 
 app.use(cors());
 app.use(express.json());
@@ -20,5 +22,6 @@ app.get('/', (req,res) =>{
 });
 
 app.use('/user', userRoutes);
+app.use('/blog', blogRoutes)
 
 module.exports = app

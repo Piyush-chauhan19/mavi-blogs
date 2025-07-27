@@ -3,14 +3,14 @@ const path = require('path');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'profilePictures/');
+        cb(null, 'coverPictures/');
     },
     filename: (req, file, cb) => {
-        const uniqueName = req.user._id + '';
+        const uniqueName = Date.now() + '-' + file.originalname;
         cb(null, uniqueName);
     }
 });
 
-const profilePicture = multer({ storage: storage });
+const coverPicture = multer({ storage: storage });
 
-module.exports = profilePicture;
+module.exports = coverPicture;

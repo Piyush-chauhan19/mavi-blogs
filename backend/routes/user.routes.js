@@ -11,29 +11,42 @@ router.post('/signup',
     userController.signupUser
 );
 
-// router.post('/verify-otp', [
-//     body('email').isEmail().withMessage('Invalid email'),
-//     body('otp').isLength({ min: 6, max: 6 }).withMessage('Invalid Otp')],
-//     userController.verifyOtp
-// );
-
 router.post('/register', [
     body('email').isEmail().withMessage('Invalid email'),
     body('userName').isLength({ min: 3 }).withMessage('Name must be atleast 3 characters'),
     body('password').isLength({ min: 6 }).withMessage('Password must be atleast 6 characters'),
     body('otp').isLength({ min: 6, max: 6 }).withMessage('Invalid Otp')],
     userController.registerUser
+);
+
+router.post('/forgot-paasword-otp',
+    body('email').isEmail().withMessage('Invalid email'),
+    userController.forgotOtp
+);
+
+router.post('/new-paasword', [
+    body('email').isEmail().withMessage('Invalid email'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be atleast 6 characters'),
+    body('otp').isLength({ min: 6, max: 6 }).withMessage('Invalid Otp')],
+    userController.newPassword
 )
+
+router.post('/username-otp', userController.sendUsernameOtp);
+router.post('/update-username', userController.updateUsername);
+
 
 router.post('/login', [
     body('email').isEmail().withMessage('Invalid email'),
     body('password').isLength({ min: 6 }).withMessage('Password must be atleast 6 characters')],
-    userController.loginUser
-);
+    userController.loginUser);
 
 router.patch('/profile-pic', authMiddleware.authUser, profilePicture.single('profilePic'), userController.updateProfilePic)
 
 router.get('/profile', authMiddleware.authUser, userController.getUserProfile)
+
+router.post('/checkUsername', authMiddleware.authUser, userController.checkUsername)
+
+router.get('/public/:username', userController.getUser)
 
 router.get('/logout', authMiddleware.authUser, userController.logoutUser)
 
