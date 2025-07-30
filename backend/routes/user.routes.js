@@ -3,7 +3,7 @@ const router = express.Router()
 const { body } = require('express-validator')
 const userController = require('../controllers/user.controller')
 const authMiddleware = require('../middlewares/authUser')
-const profilePicture = require('../middlewares/profilePictures')
+const upload = require('../middlewares/upload')
 
 router.post('/signup',
     body('email').isEmail().withMessage('Invalid email'),
@@ -40,7 +40,7 @@ router.post('/login', [
     body('password').isLength({ min: 6 }).withMessage('Password must be atleast 6 characters')],
     userController.loginUser);
 
-router.patch('/profile-pic', authMiddleware.authUser, profilePicture.single('profilePic'), userController.updateProfilePic)
+router.patch('/profile-pic', authMiddleware.authUser, upload.single('profilePic'), userController.updateProfilePic)
 
 router.get('/profile', authMiddleware.authUser, userController.getUserProfile)
 

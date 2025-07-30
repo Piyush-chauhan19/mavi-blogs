@@ -92,7 +92,7 @@ const EditBlog = () => {
                     onClick={() => fileInputRef.current.click()}
                 >
                     <img
-                        src={croppedBlob ? URL.createObjectURL(croppedBlob) : `${import.meta.env.VITE_BASE_URL}/coverPictures/${existingCoverPic}`}
+                        src={croppedBlob ? URL.createObjectURL(croppedBlob) : existingCoverPic}
                         alt="Cover"
                         className="mx-auto max-h-[300px] object-contain border-2 border-black"
                     />

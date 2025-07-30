@@ -3,13 +3,13 @@ const router = express.Router()
 const { body } = require('express-validator')
 const authMiddleware = require('../middlewares/authUser')
 const blogController = require('../controllers/blog.controller')
-const coverPicture = require('../middlewares/coverPicture')
+const upload = require('../middlewares/upload')
 
 router.patch('/like/:id', authMiddleware.authUser, blogController.toggleLike);
 
 router.post('/create',
   authMiddleware.authUser,
-  coverPicture.single('coverPic'),
+  upload.single('coverPic'),
   [body('title')
     .trim()
     .notEmpty().withMessage('Title is required')
@@ -22,7 +22,7 @@ router.post('/create',
 );
 router.patch('/update/:id',
   authMiddleware.authUser,
-  coverPicture.single('coverPic'),
+  upload.single('coverPic'),
   blogController.updateBlog
 );
 

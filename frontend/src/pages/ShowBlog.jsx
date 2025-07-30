@@ -7,9 +7,8 @@ const ShowBlog = () => {
     const token = localStorage.getItem('token')
     const { id } = useParams();
     const { user, setuser } = useContext(userDataContext);
-    const [imageLoaded, setImageLoaded] = useState(false);
     const [blog, setBlog] = useState(null);
-    const [imgSrc, setImgSrc] = useState(null);
+    const [imgSrc, setImgSrc] = useState(user?.profilePic || null);
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_BASE_URL}/user/profile`, {
@@ -68,12 +67,7 @@ const ShowBlog = () => {
 
     useEffect(() => {
         if (user?.profilePic) {
-            const profileUrl = `${import.meta.env.VITE_BASE_URL}/profilePictures/${user.profilePic}`;
-            preloadImage(profileUrl)
-                .then(() => setImageLoaded(true))
-                .catch(() => setImageLoaded(true)); // fallback if image fails to load
-        } else {
-            setImageLoaded(true); // no pic? skip
+            setImgSrc(user.profilePic);
         }
     }, [user]);
 
@@ -86,7 +80,7 @@ const ShowBlog = () => {
             });
     }, [id]);
 
-    if (!blog || !imageLoaded) return <div className="text-white p-6">Loading blog...</div>;
+    if (!blog ) return <div className="text-white p-6">Loading blog...</div>;
 
     const isLiked = blog.likes.includes(user._id);
     return (
@@ -123,7 +117,7 @@ const ShowBlog = () => {
                 <div className="relative w-full mx-auto bg-blue-200  p-6 border border-blue-200">
                     {blog.coverPic !== '' && (<>
                         <img className="mx-auto max-h-100 object-contain mb-4"
-                            src={`${import.meta.env.VITE_BASE_URL}/coverPictures/${blog.coverPic}`} alt="" />
+                            src={blog.coverPic} alt="" />
                     </>)}
 
 

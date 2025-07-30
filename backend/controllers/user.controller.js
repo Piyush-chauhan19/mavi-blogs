@@ -267,21 +267,24 @@ module.exports.updateProfilePic = async (req, res, next) => {
     }
 
     const id = req.user._id;
-
-    if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded' });
+    if (!req.file || !req.file.path) {
+        return res.status(400).json({ error: 'No image uploaded' });
     }
 
-    const updated = await userModel.findByIdAndUpdate(
-        id,
-        { profilePic: req.file.filename },
-        { new: true }
-    )
-    const user = await userModel.findById(id)
 
-    if (!updated) {
-        return res.status(404).json({ error: 'user not found' })
+    try {
+        const updated = await userModel.findByIdAndUpdate(
+            id,
+            { profilePic: req.file.path }, // Cloudinary public URL
+            { new: true }
+        );
+
+        if (!updated) return res.status(404).json({ error: 'User not found' });
+
+        res.status(200).json({ message: 'Profile pic updated', user: updated });
+        res.status(200).json({ message: 'Profile pic updated', user: updated });
+    } catch (err) {
+        console.error('Imgur upload failed:', err.message);
+        res.status(500).json({ error: 'Imgur upload failed' });
     }
-
-    res.status(200).json({ message: 'Profile pic update', user: user })
-}
+};

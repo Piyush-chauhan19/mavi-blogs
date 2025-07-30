@@ -8,14 +8,18 @@ module.exports.createBlog = async (req, res, next) => {
     return res.status(400).json({ error: err.array() });
   }
 
-  const blog = await blogModel.create({
-    title: req.body.title,
-    content: req.body.content,
-    author: req.user._id,
-    coverPic: req.file?.filename
-  })
-
-  res.status(200).json("blog created")
+  try {
+    const blog = await blogModel.create({
+      title: req.body.title,
+      content: req.body.content,
+      author: req.user._id,
+      coverPic: req.file?.path || '', // Cloudinary URL
+    });
+    res.status(200).json({ message: "Blog created" });
+  } catch (err) {
+    console.error("Create blog error:", err.message);
+    res.status(500).json({ error: 'Failed to create blog' });
+  }
 }
 
 module.exports.getBlogsByAuthor = async (req, res) => {
@@ -123,7 +127,7 @@ module.exports.updateBlog = async (req, res) => {
     blog.content = content || blog.content;
 
     if (req.file) {
-      blog.coverPic = req.file.filename;
+      blog.coverPic = req.file.path;
     }
 
     await blog.save();

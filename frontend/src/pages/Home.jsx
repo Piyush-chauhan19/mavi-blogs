@@ -12,7 +12,7 @@ const Home = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const [imgSrc, setImgSrc] = useState(null);
+    const [imgSrc, setImgSrc] = useState(user?.profilePic || null);
     const [loggedin, setloggedin] = useState(false)
 
     useEffect(() => {
@@ -39,8 +39,7 @@ const Home = () => {
 
     useEffect(() => {
         if (user?.profilePic) {
-            const profileUrl = `${import.meta.env.VITE_BASE_URL}/profilePictures/${user.profilePic}`;
-            preloadImage(profileUrl)
+            setImgSrc(user.profilePic); // use Cloudinary image URL
         }
     }, [user]);
 
@@ -133,7 +132,7 @@ const Home = () => {
                                 to={`/blog/${blog._id}`}
                                 key={blog._id} className="bg-gray-100 rounded shadow p-2">
                                 <img
-                                    src={`${import.meta.env.VITE_BASE_URL}/coverPictures/${blog.coverPic}`}
+                                    src={blog.coverPic}
                                     alt="Cover"
                                     className="w-full h-32 object-cover rounded"
                                 />
@@ -155,7 +154,7 @@ const Home = () => {
                                 to={`/blog/${blog._id}`}
                                 key={blog._id} className="bg-gray-100 rounded shadow p-2">
                                 <img
-                                    src={`${import.meta.env.VITE_BASE_URL}/coverPictures/${blog.coverPic}`}
+                                    src={blog.coverPic}
                                     alt="Cover"
                                     className="w-full h-32 object-cover rounded"
                                 />
@@ -177,7 +176,7 @@ const Home = () => {
                                 to={`/blog/${blog._id}`}
                                 key={blog._id} className="bg-gray-100 rounded shadow p-2">
                                 <img
-                                    src={`${import.meta.env.VITE_BASE_URL}/coverPictures/${blog.coverPic}`}
+                                    src={blog.coverPic}
                                     alt="Cover"
                                     className="w-full h-32 object-cover rounded"
                                 />
